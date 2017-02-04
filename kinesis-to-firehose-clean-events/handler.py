@@ -1,22 +1,18 @@
-import json
+from __future__ import print_function
 
-def hello(event, context):
-    body = {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "input": event
-    }
+import boto3
+import base64
 
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
+firehose = boto3.client('firehose')
 
-    return response
+def lambda_handler(event, context):
+    for record in event['Records']:
+        payload = base64.b64decode(record['kinesis']['data'])
 
-    # Use this code if you don't use the http event with the LAMBDA-PROXY integration
-    """
-    return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
-    }
-    """
+        # post to S3 via the Firehose delivery system
+        response = firehose.put_record(
+            DeliveryStreamName='clean-events-delivery',
+            Record={'Data': payload}
+        )
+
+    return 'Successfully transferred {} events to clean-events bucket'.format(len(event['Records']))

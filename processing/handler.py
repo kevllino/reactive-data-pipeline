@@ -1,46 +1,17 @@
 from __future__ import print_function
-
+from lib.common import *
 import boto3
 import base64
 import json
 import datetime
-import time
 import re
 
 kinesis = boto3.client('kinesis')
 firehose = boto3.client('firehose')
 
 
-def exportJsonToString(jsonObject):
-    return json.dumps(jsonObject, separators=(',', ':')) + "\n"
-
-
-def isValid(event):
-    build_pattern = re.compile("^(f[1-9]|10)\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
-    inst_id_pattern = re.compile("^[0-9a-fA-F]{2,}$")
-    pro_pattern = re.compile("^pro(.*)")
-    reader_pattern = re.compile("^reader(.*)")
-
-    try:
-        if (event['timestamp'] is not None and event['action'] is not None and event['inst_id'] is not None):
-            if (build_pattern.match(str(event['build_id'])) and inst_id_pattern.match(str(event['inst_id'])) and (
-                reader_pattern.match(str(event['action'])) or (
-                pro_pattern.match(str(event['action'])) and event['trialstate'] in ["Expired", "Activated", "Trial"]))):
-                return True
-            else:
-                return False
-    except KeyError, e:
-        return False
-
-
 fixed_schema = ["_l", "timestamp", "apptoken", "action", "inst_id", "installsource", "language", "nid",
                 "ip_address", "event_id", "trialstate", "build_id", "_p2", "extended"]
-
-
-def remove_dict_element(initial_dict, key):
-    dict_copy = dict(initial_dict)
-    del dict_copy[key]
-    return dict_copy
 
 
 def createExtendedField(event):
@@ -105,24 +76,21 @@ def lambda_handler(event, context):
             # Kinesis data is base64 encoded so decode here
             payload = json.loads(base64.b64decode(record['kinesis']['data']))
 
-            # technical filtering
-            if (isValid(payload)):
-                # technical fixing + probably proceed to a renaming
-                fixed_payload = createExtendedField(payload)
+            # technical fixing + probably proceed to a renaming
+            fixed_payload = createExtendedField(payload)
 
-                # business mapping
-                deriveBuild(fixed_payload)
-                deriveProduct(fixed_payload)
-                deriveInstId(fixed_payload)
-                deriveDate(fixed_payload)
+            # business mapping
+            deriveBuild(fixed_payload)
+            deriveProduct(fixed_payload)
+            deriveInstId(fixed_payload)
+            deriveDate(fixed_payload)
 
-                # deliver to Stream
-                kinesis.put_record(StreamName='clean_events-stream', Data=exportJsonToString(fixed_payload),
-                                   PartitionKey='1')
-
-            else:
-                firehose.put_record(DeliveryStreamName='dump-events-delivery',
-                                    Record={'Data': exportJsonToString(payload)})
+            # deliver to Stream
+            kinesis.put_record(
+                StreamName='clean_events-stream',
+                Data=exportJsonToString(fixed_payload),
+                PartitionKey='1'
+            )
         except:
             pass
 
