@@ -13,6 +13,7 @@ def enrich(event):
     event['event_id'] = str(uuid.uuid4())
     event['timestamp'] = str(long(time.time()))  # utc timestamp in seconds
 
+# takes data simulated from event.json
 def lambda_handler(event, context):
     for record in event['Records']:
         try:
