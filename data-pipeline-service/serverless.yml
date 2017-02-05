@@ -1,0 +1,49 @@
+service: data-pipeline-service
+
+provider:
+  name: aws
+  runtime: python2.7
+  stage: dev
+  region: us-west-2
+  deploymentBucket: kats-conf
+
+
+functions:
+  api-to-kinesis:
+    handler: api-to-kinesis.api_to_kinesis
+
+  kinesis-to-firehose-raw-events:
+    handler: kinesis-to-firehose-raw-events.generic_handler
+    events:
+    - stream:
+      Arn: "arn:aws:kinesis:us-west-2:310277159102:stream/raw_events-stream"
+      BatchSize: 10
+      StartingPosition: "TRIM_HORIZON"
+      Enabled: true
+
+  processing:
+    handler: processing.process
+    events:
+    - stream:
+      Arn: "arn:aws:kinesis:us-west-2:310277159102:stream/raw_events-stream"
+      BatchSize: 10
+      StartingPosition: "TRIM_HORIZON"
+      Enabled: true
+
+  kinesis-to-firehose-clean-events:
+    handler: kinesis-to-firehose-clean-event.generic_handler
+    events:
+    - stream:
+      Arn: "arn:aws:kinesis::stream/clean_events-stream"
+      BatchSize: 10
+      StartingPosition: "TRIM_HORIZON"
+      Enabled: true
+
+  sessionization:
+    handler: kinesis-to-firehose-raw-events.generic_handler
+    events:
+    - stream:
+      Arn: "arn:aws:kinesis::stream/clean_events-stream"
+      BatchSize: 10
+      StartingPosition: "TRIM_HORIZON"
+      Enabled: true

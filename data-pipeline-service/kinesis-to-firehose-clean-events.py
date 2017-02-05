@@ -5,7 +5,7 @@ import base64
 
 firehose = boto3.client('firehose')
 
-def lambda_handler(event, context):
+def generic_handler(event, context):
     for record in event['Records']:
         payload = base64.b64decode(record['kinesis']['data'])
 

@@ -1,5 +1,5 @@
 from __future__ import print_function
-from lib.common import exportJsonToString
+
 import boto3
 import base64
 import json
@@ -9,6 +9,9 @@ import re
 
 kinesis = boto3.client('kinesis')
 firehose = boto3.client('firehose')
+
+def exportJsonToString(jsonObject):
+    return json.dumps(jsonObject, separators=(',', ':')) + "\n"
 
 def enrich(event):
     # add event_id + timestamp in millis

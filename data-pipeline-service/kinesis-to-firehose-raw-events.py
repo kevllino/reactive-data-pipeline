@@ -6,7 +6,7 @@ import base64
 firehose = boto3.client('firehose')
 
 
-def lambda_handler(event, context):
+def generic_handler(event, context):
     for record in event['Records']:
 
         try:
@@ -17,7 +17,7 @@ def lambda_handler(event, context):
                 DeliveryStreamName='raw-events-delivery',
                 Record={'Data': payload}
             )
-        except:
+        except KeyError:
             pass
 
     return 'Successfully transferred {} events to raw-events bucket'.format(len(event['Records']))

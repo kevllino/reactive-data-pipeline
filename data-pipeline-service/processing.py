@@ -1,5 +1,4 @@
 from __future__ import print_function
-from lib.common import *
 import boto3
 import base64
 import json
@@ -13,6 +12,13 @@ firehose = boto3.client('firehose')
 fixed_schema = ["_l", "timestamp", "apptoken", "action", "inst_id", "installsource", "language", "nid",
                 "ip_address", "event_id", "trialstate", "build_id", "_p2", "extended"]
 
+def remove_dict_element(initial_dict, key):
+    dict_copy = dict(initial_dict)
+    del dict_copy[key]
+    return dict_copy
+
+def exportJsonToString(jsonObject):
+    return json.dumps(jsonObject, separators=(',', ':')) + "\n"
 
 def createExtendedField(event):
     extended_field = {}
@@ -70,7 +76,7 @@ def deriveDate(event):
     event[u'minute_id'] = int(minute_id)
 
 
-def lambda_handler(event, context):
+def process(event, context):
     for record in event['Records']:
         try:
             # Kinesis data is base64 encoded so decode here
