@@ -11,18 +11,21 @@
   "inst_id": "5ef0a5aa2ab8d1251296db5cc31d732109ba31428d030c9ca37df702de6c279",
   "trialstate": "Expired",
   "_l": 32,
-  "action": "proedit"},
+  "action": "proedit"
+},
   "event3": {
     "build_id": "10.3.5.34",
     "inst_id": "5ef0a5aa2ab8d1251296db5cc31d732109ba31428d030c9ca37df702de6c279",
     "trialstate": "Expired",
-    "_l": 32},
+    "_l": 32
+  },
   "event4": {
     "build_id": "10.3.5.34",
     "inst_id": "4fgh781a2ab8d1251296db5cc31d732109ba31428d030c9ca37df702de6c279",
     "trialstate": "Expired",
     "_l": 32,
-    "action": "prostarted"},
+    "action": "prostarted"
+  },
   "event5": {
     "build_id": "10.3.5.34",
     "inst_id": "4fgh781a2ab8d1251296db5cc31d732109ba31428d030c9ca37df702de6c279",

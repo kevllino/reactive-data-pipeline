@@ -1,0 +1,20 @@
+{
+  "Records": [
+    {
+      "eventID": "shardId-000000000000:49145115243490985018280067714973144582180062593244200961",
+      "eventVersion": "1.0",
+      "kinesis": {
+        "approximateArrivalTimestamp": 1428537600,
+        "partitionKey": "partitionKey-3",
+        "data": "IHsNCiAgICAiYnVpbGRfaWQiOiAiMTAuMy41LjM0IiwNCiAgICAiaW5zdF9pZCI6ICI0ZmdoNzgxYTJhYjhkMTI1MTI5OTI4M2FjYzMxZDczMjEwOWJhMzE0MjhkMDMwYzljYTM3ZGY3MDJkZTZjMjc5IiwNCiAgICAidHJpYWxzdGF0ZSI6ICJFeHBpcmVkIiwNCiAgICAiX2wiOiAzMw0KICB9",
+        "kinesisSchemaVersion": "1.0",
+        "sequenceNumber": "49545115243670985018280067714973144582180062593244200961"
+      },
+      "invokeIdentityArn": "arn:aws:iam::EXAMPLE",
+      "eventName": "aws:kinesis:record",
+      "eventSourceARN": "arn:aws:kinesis:EXAMPLE",
+      "eventSource": "aws:kinesis",
+      "awsRegion": "us-west-2"
+    }
+    ]
+    }

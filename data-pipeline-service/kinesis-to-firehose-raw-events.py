@@ -13,7 +13,7 @@ def generic_handler(event, context):
             payload = base64.b64decode(record['kinesis']['data'])
 
             # post to S3 via the Firehose delivery system
-            response = firehose.put_record(
+            firehose.put_record(
                 DeliveryStreamName='raw-events-delivery',
                 Record={'Data': payload}
             )

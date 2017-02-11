@@ -32,7 +32,7 @@ def isValid(event):
                 return True
             else:
                 return False
-    except KeyError, e:
+    except KeyError as e:
         return False
 
 # takes data simulated from event.json
@@ -45,7 +45,7 @@ def api_to_kinesis(event, context):
                 enrich(payload)
                 # post enriched record to kinesis stream
                 enrichedata = exportJsonToString(payload)
-                response = kinesis.put_record(
+                kinesis.put_record(
                     StreamName='raw_events-stream',
                     Data=enrichedata,
                     PartitionKey='1')
