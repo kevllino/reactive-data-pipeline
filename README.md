@@ -1,4 +1,5 @@
 # reactive-data-pipeline
-Presentation for Kats Conf 2 
 
-![Data Pipeline Overview](https://cloud.githubusercontent.com/assets/9676662/22619635/ca4007de-eaf0-11e6-8ee0-09f0cd047ba8.png)
+This repo is not complete, it only is a prototype of a more complex project involving data processing using AWS components (Lambda, Kinesis Stream, Kinesis Firehose) and (the Serverless framework)[https://serverless.com/]. It was written to prepare the lightning talk  at (Kats Conf 2)[http://www.katsconf.com/].
+
+More details (here)[https://kevllino.github.io/katsconf2/]. 
